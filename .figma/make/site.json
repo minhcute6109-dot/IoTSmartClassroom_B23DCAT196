@@ -1,0 +1,10 @@
+{
+  "description": "Monitor and control classroom environments with real-time data on temperature, humidity, and light, enhancing learning experiences through smart technology.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
