@@ -238,7 +238,7 @@ IoTSmartClassroomUIUX/
 
 ## 🔗 8. Tài nguyên & Liên kết Dự án
 
-* 📦 **Mã nguồn chính thức trên GitHub:** [IoTSmartClassroomUIUX](https://github.com/minhcute6109-dot/IoTSmartClassroomUIUX)
+* 📦 **Mã nguồn chính thức trên GitHub:** [IoTSmartClassroom_B23DCAT196](https://github.com/minhcute6109-dot/IoTSmartClassroom_B23DCAT196)
 * 🎨 **Bản thiết kế giao diện UI/UX trên Figma:** [Figma Design File](https://figma.com)
 * 📑 **Tài liệu đặc tả Postman API Docs:** [Postman Published Documenter](https://documenter.getpostman.com/view/47640559/2sBYArTC63)
 * 📄 **Báo cáo tổng kết đồ án:** [Bai4 - Copy.docx](file:///D:/Study/PTIT/N4-K1/IOT/Bai4%20-%20Copy.docx)
