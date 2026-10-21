@@ -1,6 +1,6 @@
-# 🏫 Hệ thống Quản trị & Giám sát Phòng học Thông minh (IoT Smart Classroom)
+# Hệ thống Quản trị và Giám sát Phòng học Thông minh (IoT Smart Classroom)
 
-> **Học phần:** Mạng lưới Vạn vật kết nối Internet (IoT) và Ứng dụng  
+> **Học phần:** IOT và ứng dụng  
 > **Sinh viên thực hiện:** Nguyễn Anh Minh  
 > **Mã sinh viên:** B23DCAT196  
 > **Lớp:** D23CQAT01-B  
@@ -19,23 +19,23 @@
 
 ---
 
-## 📌 1. Giới thiệu Tổng quan Đề tài
+## 1. Giới thiệu tổng quan đề tài
 
 Hệ thống **IoT Smart Classroom** được thiết kế và hiện thực hóa khép kín từ tầng mạch phần cứng vi điều khiển thu thập dữ liệu biên, tầng trung gian truyền thông bảo mật qua giao thức MQTT TLS, tầng máy chủ xử lý tập trung Node.js/Express, cơ sở dữ liệu quan hệ MySQL cho đến giao diện trang web quản trị thời gian thực React 19.
 
 ### Các tính năng cốt lõi:
-* 🌡️ **Giám sát vi khí hậu thời gian thực:** Thu thập các thông số Nhiệt độ (°C), Độ ẩm (% RH) và Cường độ ánh sáng (lux) định kỳ mỗi 1.5 giây, trực quan hóa trên các thẻ đo tức thời và biểu đồ Recharts mượt mà.
-* 💡 **Điều khiển thiết bị độc lập & Phản hồi thực tế:** Hỗ trợ bật/tắt từ xa 3 thiết bị điện (Đèn, Quạt, Điều hòa mô phỏng qua 3 LED 5mm nối điện trở hạn dòng 220Ω).
-* ⏱️ **Cơ chế Watchdog Timeout 2.5 giây:** Xử lý triệt để ngoại lệ phần cứng ngắt kết nối (rút cáp, mất Wi-Fi); tự động hủy trạng thái chờ, bảo vệ trạng thái an toàn trên web và ghi nhận lỗi `FAILED` trong lịch sử.
-* 🔄 **Bảo toàn trạng thái PENDING qua F5:** Sử dụng Store tập trung kết hợp `localStorage` để công tắc tiếp tục đếm nốt thời gian chờ ngay cả khi người dùng chuyển trang hoặc tải lại trình duyệt.
-* 📊 **Tra cứu, Lọc đa tiêu chí & Sắp xếp đa chiều:** Hỗ trợ lọc theo loại cảm biến, tìm kiếm nhanh linh hoạt, sắp xếp hai chiều (ASC/DESC) trực tiếp trên tiêu đề cột.
-* 📄 **Phân trang động thông minh:** Cho phép người dùng tùy ý nhập số lượng bản ghi hiển thị trên mỗi trang (`pageSize` = 10, 20, 50, 100...) và nhập số trang để chuyển nhanh (Jump to page).
+- **Giám sát vi khí hậu thời gian thực:** Thu thập các thông số Nhiệt độ (°C), Độ ẩm (% RH) và Cường độ ánh sáng (lux) định kỳ mỗi 1.5 giây, trực quan hóa trên các thẻ đo tức thời và biểu đồ Recharts liên tục.
+- **Điều khiển thiết bị độc lập & Phản hồi thực tế:** Hỗ trợ bật/tắt từ xa 3 thiết bị điện (Đèn, Quạt, Điều hòa mô phỏng qua 3 LED 5mm nối điện trở hạn dòng riêng 220Ω).
+- **Cơ chế Watchdog Timeout 2.5 giây:** Xử lý triệt để ngoại lệ phần cứng ngắt kết nối (rút cáp, mất Wi-Fi); tự động hủy trạng thái chờ, bảo vệ trạng thái an toàn trên web và ghi nhận lỗi FAILED trong lịch sử.
+- **Bảo toàn trạng thái PENDING qua F5:** Sử dụng Store quản lý tập trung kết hợp localStorage để công tắc tiếp tục đếm nốt thời gian chờ ngay cả khi người dùng chuyển trang hoặc tải lại trình duyệt.
+- **Tra cứu, Lọc đa tiêu chí & Sắp xếp đa chiều:** Hỗ trợ lọc theo loại cảm biến, tìm kiếm nhanh linh hoạt, sắp xếp hai chiều (ASC/DESC) trực tiếp trên tiêu đề cột.
+- **Phân trang động thông minh:** Cho phép người dùng tùy ý nhập số lượng bản ghi hiển thị trên mỗi trang (pageSize = 10, 20, 50, 100...) và nhập số trang để chuyển nhanh (Jump to page).
 
 ---
 
-## 🏗️ 2. Kiến trúc Hệ thống & Luồng Dữ liệu
+## 2. Kiến trúc hệ thống và Luồng dữ liệu
 
-Hệ thống được tổ chức theo mô hình phân tầng chặt chẽ:
+Hệ thống được tổ chức theo mô hình phân tầng:
 
 ```
 ┌────────────────────────────────────────────────────────┐
@@ -67,7 +67,7 @@ Hệ thống được tổ chức theo mô hình phân tầng chặt chẽ:
 
 ---
 
-## 🔌 3. Sơ đồ Đấu nối Phần cứng (Hardware Pinout)
+## 3. Sơ đồ đấu nối phần cứng (Hardware Pinout)
 
 Vi điều khiển trung tâm: **ESP32-C3 Super Mini (Kiến trúc 32-bit RISC-V 160MHz)**
 
@@ -76,17 +76,17 @@ Vi điều khiển trung tâm: **ESP32-C3 Super Mini (Kiến trúc 32-bit RISC-V
 | **Cảm biến DHT11** | DATA (OUT) | **GPIO 0** | 3.3V – 5V | Chuẩn giao tiếp 1-Wire Single-bus |
 | **Cảm biến BH1750** | SDA | **GPIO 8** | 3.3V – 5V | Chuẩn giao tiếp I2C, địa chỉ `0x23` |
 | **Cảm biến BH1750** | SCL | **GPIO 9** | 3.3V – 5V | Chuẩn giao tiếp I2C |
-| **LED 1 (Đỏ - Mô phỏng Đèn)** | Anode (+) | **GPIO 3** | 2.0V – 2.2V | Mắc nối tiếp điện trở riêng $220\Omega$ |
-| **LED 2 (Xanh lá - Mô phỏng Quạt)** | Anode (+) | **GPIO 1** | 3.0V – 3.2V | Mắc nối tiếp điện trở riêng $220\Omega$ |
-| **LED 3 (Xanh dương - Mô phỏng ĐH)** | Anode (+) | **GPIO 10** | 3.0V – 3.2V | Mắc nối tiếp điện trở riêng $220\Omega$ |
+| **LED 1 (Đỏ - Mô phỏng Đèn)** | Anode (+) | **GPIO 3** | 2.0V – 2.2V | Mắc nối tiếp điện trở riêng 220Ω |
+| **LED 2 (Xanh lá - Mô phỏng Quạt)** | Anode (+) | **GPIO 1** | 3.0V – 3.2V | Mắc nối tiếp điện trở riêng 220Ω |
+| **LED 3 (Xanh dương - Mô phỏng ĐH)** | Anode (+) | **GPIO 10** | 3.0V – 3.2V | Mắc nối tiếp điện trở riêng 220Ω |
 | **GND chung** | Cathode (-) | **GND** | 0V | Nối chung toàn bộ mass mạch |
 
 > [!CAUTION]
-> **Quy tắc an toàn điện:** Mỗi đèn LED rời 5mm **bắt buộc phải mắc nối tiếp một điện trở hạn dòng riêng** ($220\Omega - 330\Omega$) để bảo vệ an toàn cho cổng GPIO của vi điều khiển ESP32-C3. Không nối trực tiếp LED vào GPIO hoặc dùng chung một điện trở cho nhiều LED.
+> **Quy tắc an toàn điện:** Mỗi đèn LED rời 5mm **bắt buộc phải mắc nối tiếp một điện trở hạn dòng riêng** (220Ω – 330Ω) để bảo vệ an toàn cho cổng GPIO của vi điều khiển ESP32-C3. Không nối trực tiếp LED vào GPIO hoặc dùng chung một điện trở cho nhiều LED.
 
 ---
 
-## 🗄️ 4. Thiết kế Cơ sở dữ liệu MySQL
+## 4. Thiết kế cơ sở dữ liệu MySQL
 
 Cơ sở dữ liệu được chuẩn hóa đạt **Đệ tam chuẩn (3NF)** gồm đúng 5 bảng quan hệ:
 
@@ -94,20 +94,20 @@ Cơ sở dữ liệu được chuẩn hóa đạt **Đệ tam chuẩn (3NF)** g�
 2. **`Devices`**: Quản lý danh mục 3 thiết bị (`device_id`: 1 - Đèn, 2 - Quạt, 3 - Điều hòa) và trạng thái ON/OFF hiện tại.
 3. **`Sensors`**: Quản lý danh mục 3 cảm biến (`sensor_id`: 1 - Nhiệt độ, 2 - Độ ẩm, 3 - Ánh sáng) và đơn vị tính (°C, %, lux).
 4. **`DataSensor` (4 cột chuẩn tối ưu)**:
-   * `data_id` (PK, INT AUTO_INCREMENT)
-   * `sensor_id` (FK, INT, REFERENCES Sensors)
-   * `value` (DECIMAL(6,2))
-   * `recorded_at` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+   - `data_id` (PK, INT AUTO_INCREMENT)
+   - `sensor_id` (FK, INT, REFERENCES Sensors)
+   - `value` (DECIMAL(6,2))
+   - `recorded_at` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
 5. **`Action`**: Nhật ký toàn bộ tiến trình điều khiển thiết bị:
-   * `action_id` (PK, INT AUTO_INCREMENT)
-   * `user_id` (FK, INT), `device_id` (FK, INT)
-   * `action` (ENUM('ON', 'OFF'))
-   * `status` (ENUM('PENDING', 'SUCCESS', 'FAIL'))
-   * `requested_at` (TIMESTAMP), `responded_at` (TIMESTAMP NULL)
+   - `action_id` (PK, INT AUTO_INCREMENT)
+   - `user_id` (FK, INT), `device_id` (FK, INT)
+   - `action` (ENUM('ON', 'OFF'))
+   - `status` (ENUM('PENDING', 'SUCCESS', 'FAIL'))
+   - `requested_at` (TIMESTAMP), `responded_at` (TIMESTAMP NULL)
 
 ---
 
-## 🌐 5. Đặc tả Giao diện Lập trình Ứng dụng (API Documentation)
+## 5. Đặc tả giao diện lập trình ứng dụng (API Documentation)
 
 | STT | Phương thức | Đường dẫn Endpoint | Chức năng nghiệp vụ |
 | :---: | :---: | :--- | :--- |
@@ -119,10 +119,10 @@ Cơ sở dữ liệu được chuẩn hóa đạt **Đệ tam chuẩn (3NF)** g�
 
 ---
 
-## 📁 6. Cấu trúc Thư mục Dự án
+## 6. Cấu trúc thư mục dự án
 
 ```
-IoTSmartClassroomUIUX/
+IoTSmartClassroom_B23DCAT196/
 ├── backend/                               # Máy chủ ứng dụng Backend Node.js
 │   ├── config/
 │   │   └── db.js                          # Kết nối MySQL Connection Pool
@@ -168,16 +168,16 @@ IoTSmartClassroomUIUX/
 
 ---
 
-## 🚀 7. Hướng dẫn Cài đặt & Khởi chạy Hệ thống
+## 7. Hướng dẫn cài đặt và khởi chạy hệ thống
 
-### Yêu cầu Tiên quyết:
-* **Node.js:** Phiên bản `>= 18.x` (khuyến nghị Node.js LTS v20.x).
-* **MySQL Server:** Phiên bản `>= 8.0` đang chạy.
-* **Môi trường nạp Firmware:** VS Code tích hợp tiện ích **PlatformIO IDE**.
+### Yêu cầu môi trường:
+- **Node.js:** Phiên bản `>= 18.x` (khuyến nghị Node.js LTS v20.x).
+- **MySQL Server:** Phiên bản `>= 8.0` đang chạy.
+- **Môi trường nạp Firmware:** VS Code tích hợp tiện ích **PlatformIO IDE**.
 
 ---
 
-### Bước 1: Khởi tạo Cơ sở dữ liệu MySQL
+### Bước 1: Khởi tạo cơ sở dữ liệu MySQL
 1. Đăng nhập vào MySQL:
    ```bash
    mysql -u root -p
@@ -189,7 +189,7 @@ IoTSmartClassroomUIUX/
 
 ---
 
-### Bước 2: Cài đặt và Khởi chạy Backend Server
+### Bước 2: Cài đặt và khởi chạy Backend Server
 1. Điều hướng vào thư mục backend:
    ```bash
    cd backend
@@ -211,7 +211,7 @@ IoTSmartClassroomUIUX/
 
 ---
 
-### Bước 3: Cài đặt và Khởi chạy Frontend React
+### Bước 3: Cài đặt và khởi chạy Frontend React
 1. Mở cửa sổ dòng lệnh tại thư mục gốc của dự án:
    ```bash
    npm install
@@ -227,7 +227,7 @@ IoTSmartClassroomUIUX/
 
 ---
 
-### Bước 4: Nạp Firmware cho Vi điều khiển ESP32-C3
+### Bước 4: Nạp Firmware cho vi điều khiển ESP32-C3
 1. Mở thư mục `hardware/esp32` bằng phần mềm VS Code có cài đặt **PlatformIO**.
 2. Mở file `src/main.cpp`, cập nhật tên Wi-Fi (`ssid`), mật khẩu (`password`) và thông tin Broker HiveMQ Cloud.
 3. Cắm bo mạch ESP32-C3 Super Mini qua cổng USB Type-C.
@@ -236,12 +236,12 @@ IoTSmartClassroomUIUX/
 
 ---
 
-## 🔗 8. Tài nguyên & Liên kết Dự án
+## 8. Tài nguyên và liên kết dự án
 
-* 📦 **Mã nguồn chính thức trên GitHub:** [IoTSmartClassroom_B23DCAT196](https://github.com/minhcute6109-dot/IoTSmartClassroom_B23DCAT196)
-* 🎨 **Bản thiết kế giao diện UI/UX trên Figma:** [Figma Design File](https://figma.com)
-* 📑 **Tài liệu đặc tả Postman API Docs:** [Postman Published Documenter](https://documenter.getpostman.com/view/47640559/2sBYArTC63)
-* 📄 **Báo cáo tổng kết đồ án:** [Bai4 - Copy.docx](file:///D:/Study/PTIT/N4-K1/IOT/Bai4%20-%20Copy.docx)
+- **Mã nguồn chính thức trên GitHub:** [IoTSmartClassroom_B23DCAT196](https://github.com/minhcute6109-dot/IoTSmartClassroom_B23DCAT196)
+- **Bản thiết kế giao diện UI/UX trên Figma:** [Figma Design File](https://figma.com)
+- **Tài liệu đặc tả Postman API Docs:** [Postman Published Documenter](https://documenter.getpostman.com/view/47640559/2sBYArTC63)
+- **Báo cáo tổng kết đồ án:** [Bai4 - Copy.docx](file:///D:/Study/PTIT/N4-K1/IOT/Bai4%20-%20Copy.docx)
 
 ---
-*© 2026 Nguyễn Anh Minh - B23DCAT196 - PTIT. Bản quyền thuộc về tác giả.*
+*Bản quyền thuộc về tác giả Nguyễn Anh Minh - B23DCAT196 - PTIT.*
