@@ -1,0 +1,275 @@
+{
+  "info": {
+    "_postman_id": "47640559-a2c52260-df1c-43a7-b9e8-70b5770ee74c",
+    "name": "IoT Smart Classroom API",
+    "description": "# IoT Smart Classroom API\n\nTài liệu API chính thức và chi tiết cho hệ thống IoT Smart Classroom (Phòng LAB-B204).\n\n## Chức năng hệ thống:\n- Giám sát dữ liệu cảm biến: Nhiệt độ, Độ ẩm, Cường độ ánh sáng.\n- Giám sát trạng thái 3 thiết bị: Đèn, Quạt, Điều hòa.\n- Điều khiển thiết bị từ xa qua giao thức MQTT.\n- Lưu trữ và tra cứu lịch sử thao tác bật/tắt thiết bị.\n- Quản lý hồ sơ cá nhân sinh viên.\n\n## Giao tiếp MQTT (Eclipse Mosquitto):\n- `Data_Sensors`: Thu thập dữ liệu cảm biến từ ESP32 gửi lên.\n- `Device_control`: Gửi lệnh điều khiển bật/tắt xuống ESP32.\n- `Device_Response`: Nhận phản hồi trạng thái thực tế từ ESP32.\n\n## Base URL:\n- Mặc định: `{{base_url}}` (Thực tế backend: `http://localhost:5000`)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Sensor",
+      "description": "Quản lý và tra cứu dữ liệu các cảm biến trong phòng học",
+      "item": [
+        {
+          "name": "Get Sensor Data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/sensors?page=1&limit=10&sort_key=data_id&sort_dir=DESC&search_field=all&search_value=&sensor_type=",
+              "host": ["{{base_url}}"],
+              "path": ["api", "sensors"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Số thứ tự trang cần lấy (số nguyên dương >= 1)"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Số lượng bản ghi trên một trang (số nguyên dương >= 1, tùy biến tự do theo nhu cầu, mặc định: 10)"
+                },
+                {
+                  "key": "sort_key",
+                  "value": "data_id",
+                  "description": "Trường sắp xếp: data_id | sensor_name | sensor_type | value | recorded_at"
+                },
+                {
+                  "key": "sort_dir",
+                  "value": "DESC",
+                  "description": "Chiều sắp xếp: ASC (tăng dần) hoặc DESC (giảm dần)"
+                },
+                {
+                  "key": "search_field",
+                  "value": "all",
+                  "description": "Cột tìm kiếm: sensor_name | sensor_type | recorded_at | all"
+                },
+                {
+                  "key": "search_value",
+                  "value": "",
+                  "description": "Từ khóa tìm kiếm (tìm tương đối LIKE %value%)"
+                },
+                {
+                  "key": "sensor_type",
+                  "value": "",
+                  "description": "Lọc chính xác theo loại cảm biến: 'Nhiệt độ', 'Độ ẩm', 'Ánh sáng'"
+                }
+              ]
+            },
+            "description": "Lấy danh sách dữ liệu cảm biến từ cơ sở dữ liệu MySQL (kết hợp bảng DataSensor và Sensors).\nHỗ trợ đầy đủ phân trang, sắp xếp và tìm kiếm lọc nâng cao."
+          },
+          "response": [
+            {
+              "name": "200 OK - Thành công",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/sensors?page=1&limit=3",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "sensors"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"data_id\": 1,\n      \"sensor_id\": 1,\n      \"sensor_name\": \"Cảm biến nhiệt độ\",\n      \"sensor_type\": \"Nhiệt độ\",\n      \"value\": 28.4,\n      \"unit\": \"°C\",\n      \"recorded_at\": \"2026-08-21 13:45:32\"\n    },\n    {\n      \"data_id\": 2,\n      \"sensor_id\": 2,\n      \"sensor_name\": \"Cảm biến độ ẩm\",\n      \"sensor_type\": \"Độ ẩm\",\n      \"value\": 55.2,\n      \"unit\": \"%\",\n      \"recorded_at\": \"2026-08-21 13:45:32\"\n    },\n    {\n      \"data_id\": 3,\n      \"sensor_id\": 3,\n      \"sensor_name\": \"Cảm biến ánh sáng\",\n      \"sensor_type\": \"Ánh sáng\",\n      \"value\": 249.1,\n      \"unit\": \"lux\",\n      \"recorded_at\": \"2026-08-21 13:45:32\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"limit\": 3,\n    \"total\": 90\n  }\n}"
+            },
+            {
+              "name": "400 Bad Request - Tham số không hợp lệ",
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": false,\n  \"message\": \"Tham số sort_key 'invalid_col' không hợp lệ. Chỉ chấp nhận: data_id, sensor_name, sensor_type, value, recorded_at.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Device",
+      "description": "Theo dõi và gửi lệnh điều khiển trạng thái các thiết bị trong phòng",
+      "item": [
+        {
+          "name": "Get Device States",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/device-states",
+              "host": ["{{base_url}}"],
+              "path": ["api", "device-states"]
+            },
+            "description": "Lấy trạng thái hiện thời của 3 thiết bị trong phòng (1: Đèn, 2: Quạt, 3: Điều hòa) từ bảng Devices."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"devices\": [\n    {\n      \"device_id\": 1,\n      \"device_name\": \"Đèn\",\n      \"status\": \"ON\"\n    },\n    {\n      \"device_id\": 2,\n      \"device_name\": \"Quạt\",\n      \"status\": \"OFF\"\n    },\n    {\n      \"device_id\": 3,\n      \"device_name\": \"Điều hòa\",\n      \"status\": \"OFF\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Control Device",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"ON\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/devices/:device_id/control",
+              "host": ["{{base_url}}"],
+              "path": ["api", "devices", ":device_id", "control"],
+              "variable": [
+                {
+                  "key": "device_id",
+                  "value": "1",
+                  "description": "ID thiết bị cần điều khiển (1: Đèn, 2: Quạt, 3: Điều hòa)"
+                }
+              ]
+            },
+            "description": "Gửi yêu cầu điều khiển bật/tắt thiết bị.\n- Backend nhận yêu cầu, ghi bản ghi vào bảng Action với trạng thái 'PENDING'.\n- Đồng thời publish bản tin điều khiển xuống topic MQTT `Device_control`.\n- Chờ phản hồi từ phần cứng qua topic `Device_Response` (hoặc timeout 2.5 giây sẽ đánh dấu 'FAIL')."
+          },
+          "response": [
+            {
+              "name": "200 OK - Tiếp nhận lệnh thành công (PENDING)",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": true,\n  \"action_id\": 123,\n  \"device_id\": 1,\n  \"device_name\": \"Đèn\",\n  \"action\": \"ON\",\n  \"status\": \"PENDING\",\n  \"message\": \"Device command accepted\"\n}"
+            },
+            {
+              "name": "400 Bad Request - Sai mã thiết bị hoặc hành động",
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"success\": false,\n  \"message\": \"Hành động điều khiển không hợp lệ. Chỉ chấp nhận: 'ON' hoặc 'OFF'.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Action History",
+      "description": "Tra cứu lịch sử thao tác bật/tắt và kết quả phản hồi của các thiết bị",
+      "item": [
+        {
+          "name": "Get Action History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/history?page=1&limit=10&sort_key=id&sort_dir=DESC&search_field=all&search_value=&device=&action=&status=",
+              "host": ["{{base_url}}"],
+              "path": ["api", "history"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Trang cần xem (số nguyên dương >= 1)"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Số lượng bản ghi trên một trang (số nguyên dương >= 1, tùy biến tự do theo nhu cầu, mặc định: 10)"
+                },
+                {
+                  "key": "sort_key",
+                  "value": "id",
+                  "description": "Trường sắp xếp: id | device | action | status | time"
+                },
+                {
+                  "key": "sort_dir",
+                  "value": "DESC",
+                  "description": "Chiều sắp xếp: ASC | DESC"
+                },
+                {
+                  "key": "search_field",
+                  "value": "all",
+                  "description": "Cột tìm kiếm: device | action | status | all"
+                },
+                {
+                  "key": "search_value",
+                  "value": "",
+                  "description": "Từ khóa tìm kiếm (LIKE %value%)"
+                },
+                {
+                  "key": "device",
+                  "value": "",
+                  "description": "Lọc theo tên thiết bị: 'Đèn', 'Quạt', 'Điều hòa'"
+                },
+                {
+                  "key": "action",
+                  "value": "",
+                  "description": "Lọc theo hành động: 'ON' hoặc 'OFF'"
+                },
+                {
+                  "key": "status",
+                  "value": "",
+                  "description": "Lọc trạng thái thực thi: 'ON', 'OFF', 'PENDING', 'FAILED'"
+                }
+              ]
+            },
+            "description": "Lấy danh sách lịch sử thao tác từ bảng Action JOIN bảng Devices. Hỗ trợ phân trang, tìm kiếm, lọc theo thiết bị/hành động/trạng thái và sắp xếp linh hoạt."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"device\": \"Đèn\",\n      \"action\": \"ON\",\n      \"status\": \"SUCCESS\",\n      \"time\": \"2026-08-16 08:00:00\",\n      \"response_time\": \"2026-08-16 08:00:01\"\n    },\n    {\n      \"id\": 2,\n      \"device\": \"Quạt\",\n      \"action\": \"OFF\",\n      \"status\": \"FAIL\",\n      \"time\": \"2026-08-16 08:07:00\",\n      \"response_time\": \"2026-08-16 08:07:01\"\n    },\n    {\n      \"id\": 3,\n      \"device\": \"Điều hòa\",\n      \"action\": \"ON\",\n      \"status\": \"PENDING\",\n      \"time\": \"2026-08-16 08:14:00\",\n      \"response_time\": null\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"limit\": 10,\n    \"total\": 60\n  }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "description": "Thông tin sinh viên và tài nguyên dự án",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/profile",
+              "host": ["{{base_url}}"],
+              "path": ["api", "profile"]
+            },
+            "description": "Lấy thông tin cá nhân của người dùng/sinh viên thực hiện dự án từ bảng Users."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "body": "{\n  \"user_id\": 1,\n  \"name\": \"Nguyễn Anh Minh\",\n  \"student_id\": \"B23DCAT196\",\n  \"email\": \"MinhNA.B23AT196@stu.ptit.edu.vn\",\n  \"username\": \"minhanh\",\n  \"github_url\": \"https://github.com\",\n  \"figma_url\": \"https://figma.com\",\n  \"api_doc_url\": \"https://documenter.getpostman.com/view/47640559/2sBYArTC63\",\n  \"pdf_report_url\": \"#\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

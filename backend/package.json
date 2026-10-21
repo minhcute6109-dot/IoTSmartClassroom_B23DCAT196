@@ -1,0 +1,19 @@
+{
+  "name": "iot-smart-classroom-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.js",
+    "dev": "node --watch --env-file-if-exists=.env server.js",
+    "init-db": "node --env-file-if-exists=.env init_db.js",
+    "test-mqtt": "node --env-file-if-exists=.env test_mqtt.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "mqtt": "^5.10.4",
+    "mysql2": "^3.12.0",
+    "socket.io": "^4.8.3"
+  }
+}

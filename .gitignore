@@ -3,6 +3,8 @@ dist/
 build/
 .cache/
 .env*
+!.env.example
+!backend/.env.example
 .vite/
 vite.config.*.timestamp-*
 *.tsbuildinfo
@@ -11,6 +13,11 @@ logs/
 *.log
 .claude-replay.*
 .tmp-*
+.vscode/
+.agents/
+*.pre*
+crop_*.png
+youtube_info.json
 
 # Platform-managed agentplat state, not project source. In the
 # client-initiated single-repo workspace layout (make's `Path: "."` spec) the

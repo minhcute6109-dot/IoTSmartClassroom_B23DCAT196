@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "C:/Users/Admin/Documents/PlatformIO/Projects/IoT"
+		},
+		{
+			"name": "esp32",
+			"path": "."
+		}
+	],
+	"settings": {}
+}

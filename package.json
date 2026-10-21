@@ -1,5 +1,5 @@
 {
-  "name": "figma-make-app",
+  "name": "iot-smart-classroom-b23dcat196",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -12,7 +12,8 @@
   "dependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "recharts": "^2.15.4"
+    "recharts": "^2.15.4",
+    "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.0.0",
