@@ -24,8 +24,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/sensors?page=1&limit=10&sort_key=data_id&sort_dir=DESC&search_field=all&search_value=&sensor_type=",
-              "host": ["{{base_url}}"],
-              "path": ["api", "sensors"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "sensors"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -74,14 +79,24 @@
                 "header": [],
                 "url": {
                   "raw": "{{base_url}}/api/sensors?page=1&limit=3",
-                  "host": ["{{base_url}}"],
-                  "path": ["api", "sensors"]
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "sensors"
+                  ]
                 }
               },
               "status": "OK",
               "code": 200,
               "_postman_previewlanguage": "json",
-              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
               "body": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"data_id\": 1,\n      \"sensor_id\": 1,\n      \"sensor_name\": \"Cảm biến nhiệt độ\",\n      \"sensor_type\": \"Nhiệt độ\",\n      \"value\": 28.4,\n      \"unit\": \"°C\",\n      \"recorded_at\": \"2026-08-21 13:45:32\"\n    },\n    {\n      \"data_id\": 2,\n      \"sensor_id\": 2,\n      \"sensor_name\": \"Cảm biến độ ẩm\",\n      \"sensor_type\": \"Độ ẩm\",\n      \"value\": 55.2,\n      \"unit\": \"%\",\n      \"recorded_at\": \"2026-08-21 13:45:32\"\n    },\n    {\n      \"data_id\": 3,\n      \"sensor_id\": 3,\n      \"sensor_name\": \"Cảm biến ánh sáng\",\n      \"sensor_type\": \"Ánh sáng\",\n      \"value\": 249.1,\n      \"unit\": \"lux\",\n      \"recorded_at\": \"2026-08-21 13:45:32\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"limit\": 3,\n    \"total\": 90\n  }\n}"
             },
             {
@@ -106,8 +121,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/device-states",
-              "host": ["{{base_url}}"],
-              "path": ["api", "device-states"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "device-states"
+              ]
             },
             "description": "Lấy trạng thái hiện thời của 3 thiết bị trong phòng (1: Đèn, 2: Quạt, 3: Điều hòa) từ bảng Devices."
           },
@@ -137,8 +157,15 @@
             },
             "url": {
               "raw": "{{base_url}}/api/devices/:device_id/control",
-              "host": ["{{base_url}}"],
-              "path": ["api", "devices", ":device_id", "control"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "devices",
+                ":device_id",
+                "control"
+              ],
               "variable": [
                 {
                   "key": "device_id",
@@ -179,8 +206,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/history?page=1&limit=10&sort_key=id&sort_dir=DESC&search_field=all&search_value=&device=&action=&status=",
-              "host": ["{{base_url}}"],
-              "path": ["api", "history"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "history"
+              ],
               "query": [
                 {
                   "key": "page",
@@ -254,8 +286,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/api/profile",
-              "host": ["{{base_url}}"],
-              "path": ["api", "profile"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "profile"
+              ]
             },
             "description": "Lấy thông tin cá nhân của người dùng/sinh viên thực hiện dự án từ bảng Users."
           },
@@ -265,7 +302,7 @@
               "status": "OK",
               "code": 200,
               "_postman_previewlanguage": "json",
-              "body": "{\n  \"user_id\": 1,\n  \"name\": \"Nguyễn Anh Minh\",\n  \"student_id\": \"B23DCAT196\",\n  \"email\": \"MinhNA.B23AT196@stu.ptit.edu.vn\",\n  \"username\": \"minhanh\",\n  \"github_url\": \"https://github.com\",\n  \"figma_url\": \"https://figma.com\",\n  \"api_doc_url\": \"https://documenter.getpostman.com/view/47640559/2sBYArTC63\",\n  \"pdf_report_url\": \"#\"\n}"
+              "body": "{\n  \"user_id\": 1,\n  \"name\": \"Nguyễn Anh Minh\",\n  \"student_id\": \"B23DCAT196\",\n  \"email\": \"MinhNA.B23AT196@stu.ptit.edu.vn\",\n  \"username\": \"minhanh\",\n  \"github_url\": \"https://github.com/minhcute6109-dot/IoTSmartClassroom_B23DCAT196\",\n  \"figma_url\": \"https://www.figma.com/design/bjGIBXsdJzlBvmrRa8hXwq/IOT?node-id=0-1&t=z2RED8ZvFTu4Vx7b-1\",\n  \"api_doc_url\": \"https://documenter.getpostman.com/view/47640559/2sBYHURyve\",\n  \"pdf_report_url\": \"https://drive.google.com/drive/u/2/folders/1ZonyWe0iwdl6QcNq0tvOk49-g9P1SCyg\"\n}"
             }
           ]
         }

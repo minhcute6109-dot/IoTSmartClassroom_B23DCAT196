@@ -26,10 +26,10 @@ CREATE TABLE IF NOT EXISTS Users (
   name VARCHAR(100) NOT NULL,
   student_id VARCHAR(20) NOT NULL,
   email VARCHAR(100) NOT NULL,
-  github_url VARCHAR(255) DEFAULT 'https://github.com',
-  figma_url VARCHAR(255) DEFAULT 'https://figma.com',
-  api_doc_url VARCHAR(255) DEFAULT 'https://documenter.getpostman.com/view/47640559/2sBYArTC63',
-  pdf_report_url VARCHAR(255) DEFAULT '#',
+  github_url VARCHAR(500) DEFAULT 'https://github.com/minhcute6109-dot/IoTSmartClassroom_B23DCAT196',
+  figma_url VARCHAR(500) DEFAULT 'https://www.figma.com/design/bjGIBXsdJzlBvmrRa8hXwq/IOT?node-id=0-1&t=z2RED8ZvFTu4Vx7b-1',
+  api_doc_url VARCHAR(500) DEFAULT 'https://documenter.getpostman.com/view/47640559/2sBYHURyve',
+  pdf_report_url VARCHAR(500) DEFAULT 'https://drive.google.com/drive/u/2/folders/1ZonyWe0iwdl6QcNq0tvOk49-g9P1SCyg',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -85,11 +85,11 @@ VALUES (
   'Nguyễn Anh Minh',
   'B23DCAT196',
   'MinhNA.B23AT196@stu.ptit.edu.vn',
-  'https://github.com',
-  'https://figma.com',
-  'https://documenter.getpostman.com/view/47640559/2sBYArTC63',
-  '#'
-) ON DUPLICATE KEY UPDATE name = VALUES(name);
+  'https://github.com/minhcute6109-dot/IoTSmartClassroom_B23DCAT196',
+  'https://www.figma.com/design/bjGIBXsdJzlBvmrRa8hXwq/IOT?node-id=0-1&t=z2RED8ZvFTu4Vx7b-1',
+  'https://documenter.getpostman.com/view/47640559/2sBYHURyve',
+  'https://drive.google.com/drive/u/2/folders/1ZonyWe0iwdl6QcNq0tvOk49-g9P1SCyg'
+) ON DUPLICATE KEY UPDATE name = VALUES(name), github_url = VALUES(github_url), figma_url = VALUES(figma_url), api_doc_url = VALUES(api_doc_url), pdf_report_url = VALUES(pdf_report_url);
 
 -- Nạp danh mục 3 thiết bị cho Devices
 INSERT INTO Devices (device_id, device_name, device_type, status)
