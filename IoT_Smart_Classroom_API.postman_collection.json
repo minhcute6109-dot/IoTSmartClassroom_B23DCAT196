@@ -741,7 +741,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"user_id\": 1,\n  \"name\": \"Nguyễn Anh Minh\",\n  \"student_id\": \"B23DCAT196\",\n  \"email\": \"MinhNA.B23AT196@stu.ptit.edu.vn\",\n  \"username\": \"minhanh\",\n  \"github_url\": \"https://github.com/minhcute6109-dot/IoTSmartClassroom_B23DCAT196\",\n  \"figma_url\": \"https://www.figma.com/design/bjGIBXsdJzlBvmrRa8hXwq/IOT?node-id=0-1&t=z2RED8ZvFTu4Vx7b-1\",\n  \"api_doc_url\": \"https://documenter.getpostman.com/view/47640559/2sBYHURyve\",\n  \"pdf_report_url\": \"https://drive.google.com/drive/u/2/folders/1ZonyWe0iwdl6QcNq0tvOk49-g9P1SCyg\"\n}"
+              "body": "{\n  \"user_id\": 1,\n  \"name\": \"Nguyễn Anh Minh\",\n  \"student_id\": \"B23DCAT196\",\n  \"email\": \"MinhNA.B23AT196@stu.ptit.edu.vn\",\n  \"username\": \"minhanh\",\n  \"github_url\": \"https://github.com/minhcute6109-dot/IoTSmartClassroom_B23DCAT196\",\n  \"figma_url\": \"https://www.figma.com/design/bjGIBXsdJzlBvmrRa8hXwq/IOT?node-id=0-1&t=z2RED8ZvFTu4Vx7b-1\",\n  \"api_doc_url\": \"https://documenter.getpostman.com/view/47640559/2sBYHURzJf\",\n  \"pdf_report_url\": \"https://drive.google.com/drive/u/2/folders/1ZonyWe0iwdl6QcNq0tvOk49-g9P1SCyg\"\n}"
             },
             {
               "name": "401 Unauthorized - Thiếu hoặc sai Token",

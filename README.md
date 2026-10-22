@@ -240,7 +240,7 @@ IoTSmartClassroom_B23DCAT196/
 
 - **Mã nguồn chính thức trên GitHub:** [IoTSmartClassroom_B23DCAT196](https://github.com/minhcute6109-dot/IoTSmartClassroom_B23DCAT196)
 - **Bản thiết kế giao diện UI/UX trên Figma:** [Figma Design File](https://www.figma.com/design/bjGIBXsdJzlBvmrRa8hXwq/IOT?node-id=0-1&t=z2RED8ZvFTu4Vx7b-1)
-- **Tài liệu đặc tả Postman API Docs:** [Postman Published Documenter](https://documenter.getpostman.com/view/47640559/2sBYHURyve)
+- **Tài liệu đặc tả Postman API Docs:** [Postman Published Documenter](https://documenter.getpostman.com/view/47640559/2sBYHURzJf)
 - **Báo cáo tổng kết đồ án (PDF Google Drive):** [Google Drive Folder](https://drive.google.com/drive/u/2/folders/1ZonyWe0iwdl6QcNq0tvOk49-g9P1SCyg)
 - **Báo cáo tổng kết đồ án:** [Bai4 - Copy.docx](file:///D:/Study/PTIT/N4-K1/IOT/Bai4%20-%20Copy.docx)
 
