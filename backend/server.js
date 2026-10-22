@@ -26,6 +26,7 @@ import sensorRoutes from "./routes/sensorRoutes.js"
 import deviceRoutes from "./routes/deviceRoutes.js"
 import historyRoutes from "./routes/historyRoutes.js"
 import profileRoutes from "./routes/profileRoutes.js"
+import authRoutes from "./routes/authRoutes.js"
 import { testDbConnection } from "./config/db.js"
 import { initMqttService } from "./services/mqttService.js"
 import { initSocketService } from "./services/socketService.js"
@@ -40,11 +41,12 @@ const httpServer = http.createServer(app)
 app.use(cors()) // Cho phép Frontend gọi API từ domain/port khác
 app.use(express.json()) // Đọc dữ liệu JSON trong body request
 
-// 3. Đăng ký các Route API chính (Đúng 5 endpoint theo API Contract)
-app.use("/api", sensorRoutes) // GET /api/sensors
-app.use("/api", deviceRoutes) // GET /api/device-states & POST /api/devices/:device_id/control
-app.use("/api", historyRoutes) // GET /api/history
-app.use("/api", profileRoutes) // GET /api/profile
+// 3. Đăng ký các Route API chính (Đầy đủ 6 endpoint chuẩn bảo mật JWT)
+app.use("/api", authRoutes) // POST /api/auth/login & POST /api/login
+app.use("/api", sensorRoutes) // GET /api/sensors (Yêu cầu Token)
+app.use("/api", deviceRoutes) // GET /api/device-states & POST /api/devices/:device_id/control (Yêu cầu Token)
+app.use("/api", historyRoutes) // GET /api/history (Yêu cầu Token)
+app.use("/api", profileRoutes) // GET /api/profile (Yêu cầu Token)
 
 // 4. Xử lý đường dẫn không tồn tại (404 Not Found)
 app.use((req, res) => {

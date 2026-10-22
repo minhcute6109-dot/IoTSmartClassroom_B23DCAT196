@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { VALID_CREDENTIALS } from "../data/mockData"
+import { login, AUTH_TOKEN_KEY } from "../services/api"
 
 interface LoginProps {
   onLogin: (remember: boolean) => void
@@ -16,8 +16,8 @@ export default function Login({ onLogin }: LoginProps) {
   const [errorMessage, setErrorMessage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
-  // Xử lý khi người dùng nhấn nút Đăng nhập hoặc ấn Enter
-  const handleSubmit = (e: React.FormEvent) => {
+  // Xử lý khi người dùng nhấn nút Đăng nhập hoặc ấn Enter (Gửi API xác thực JWT)
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setErrorMessage("")
 
@@ -28,22 +28,19 @@ export default function Login({ onLogin }: LoginProps) {
 
     setIsLoading(true)
 
-    // Giả lập độ trễ mạng 600ms trước khi xác thực
-    setTimeout(() => {
-      const isValid = VALID_CREDENTIALS.some(
-        (credential) =>
-          credential.username === username.trim() &&
-          credential.password === password,
-      )
-
-      setIsLoading(false)
-
-      if (isValid) {
+    try {
+      const res = await login(username.trim(), password)
+      if (res?.token) {
+        localStorage.setItem(AUTH_TOKEN_KEY, res.token)
         onLogin(remember)
       } else {
-        setErrorMessage("Tên đăng nhập hoặc mật khẩu không chính xác.")
+        setErrorMessage(res?.message || "Đăng nhập không thành công.")
       }
-    }, 600)
+    } catch (err: any) {
+      setErrorMessage(err.message || "Tên đăng nhập hoặc mật khẩu không chính xác.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (

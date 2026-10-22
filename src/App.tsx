@@ -8,6 +8,7 @@ import Profile from "./pages/Profile"
 import Login from "./pages/Login"
 import type { Page } from "./types"
 import { clearAllDeviceStoreData } from "./services/deviceControlStore"
+import { AUTH_TOKEN_KEY } from "./services/api"
 
 const PAGE_LABELS: Record<Page, string> = {
   dashboard: "Dashboard",
@@ -23,10 +24,12 @@ const PAGE_STORAGE_KEY = "iot_smart_classroom_current_page"
  * Root component
  */
 export default function App() {
-  // 1. Giữ trạng thái đăng nhập khi F5 (chỉ thoát khi bấm Đăng xuất)
+  // 1. Giữ trạng thái đăng nhập khi F5 (chỉ thoát khi bấm Đăng xuất hoặc Token hết hạn)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
     try {
-      return localStorage.getItem(AUTH_STORAGE_KEY) === "true"
+      const hasFlag = localStorage.getItem(AUTH_STORAGE_KEY) === "true"
+      const hasToken = Boolean(localStorage.getItem(AUTH_TOKEN_KEY))
+      return hasFlag && hasToken
     } catch {
       return false
     }
@@ -79,6 +82,15 @@ export default function App() {
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [showUserMenu])
 
+  // Lắng nghe sự kiện token hết hạn từ tầng API để tự động đăng xuất
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      handleLogout()
+    }
+    window.addEventListener("iot_auth_unauthorized", handleUnauthorized)
+    return () => window.removeEventListener("iot_auth_unauthorized", handleUnauthorized)
+  }, [])
+
   // Xử lý đăng nhập thành công
   const handleLogin = (_remember: boolean) => {
     try {
@@ -92,6 +104,7 @@ export default function App() {
     try {
       localStorage.removeItem(AUTH_STORAGE_KEY)
       localStorage.removeItem(PAGE_STORAGE_KEY)
+      localStorage.removeItem(AUTH_TOKEN_KEY)
       sessionStorage.clear()
       clearAllDeviceStoreData()
     } catch {}

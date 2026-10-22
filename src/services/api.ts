@@ -20,20 +20,45 @@ import type {
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api"
 
-/**
- * Hàm helper xử lý fetch chung, kiểm tra status và parse JSON
- */
+export const AUTH_TOKEN_KEY = "iot_auth_token"
 
+export interface LoginResponse {
+  success: boolean
+  message: string
+  token: string
+  user: {
+    user_id: number
+    username: string
+    name: string
+    student_id: string
+    email: string
+  }
+}
+
+/**
+ * 0. POST /api/auth/login
+ * Đăng nhập và nhận Token JWT
+ */
+export async function login(username: string, password: string): Promise<LoginResponse> {
+  return request<LoginResponse>("/auth/login", {
+    method: "POST",
+    body: JSON.stringify({ username, password }),
+  })
+}
+
+/**
+ * Hàm helper xử lý fetch chung, tự động đính kèm Token và parse JSON
+ */
 async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`
+  const token = typeof window !== "undefined" ? localStorage.getItem(AUTH_TOKEN_KEY) : null
 
   const response = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
-
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options?.headers,
     },
-
     ...options,
   })
 
@@ -42,12 +67,19 @@ async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
 
     try {
       const errorJson = await response.json()
-
       if (errorJson?.message) {
         errorMessage = errorJson.message
       }
     } catch {
       // Bỏ qua nếu không parse được JSON lỗi
+    }
+
+    if (response.status === 401 && endpoint !== "/auth/login" && endpoint !== "/login") {
+      try {
+        localStorage.removeItem(AUTH_TOKEN_KEY)
+        localStorage.removeItem("iot_smart_classroom_logged_in")
+        window.dispatchEvent(new Event("iot_auth_unauthorized"))
+      } catch {}
     }
 
     throw new Error(errorMessage)

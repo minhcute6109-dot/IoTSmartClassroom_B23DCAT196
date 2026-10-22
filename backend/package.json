@@ -10,8 +10,10 @@
     "test-mqtt": "node --env-file-if-exists=.env test_mqtt.js"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.3",
     "mqtt": "^5.10.4",
     "mysql2": "^3.12.0",
     "socket.io": "^4.8.3"

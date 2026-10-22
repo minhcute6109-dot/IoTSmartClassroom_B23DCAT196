@@ -1,21 +1,166 @@
 {
   "info": {
-    "_postman_id": "47640559-a2c52260-df1c-43a7-b9e8-70b5770ee74c",
+    "_postman_id": "c1f8a845-9831-4e78-bc46-5f1e3c882196",
     "name": "IoT Smart Classroom API",
-    "description": "# IoT Smart Classroom API\n\nTài liệu API chính thức và chi tiết cho hệ thống IoT Smart Classroom (Phòng LAB-B204).\n\n## Chức năng hệ thống:\n- Giám sát dữ liệu cảm biến: Nhiệt độ, Độ ẩm, Cường độ ánh sáng.\n- Giám sát trạng thái 3 thiết bị: Đèn, Quạt, Điều hòa.\n- Điều khiển thiết bị từ xa qua giao thức MQTT.\n- Lưu trữ và tra cứu lịch sử thao tác bật/tắt thiết bị.\n- Quản lý hồ sơ cá nhân sinh viên.\n\n## Giao tiếp MQTT (Eclipse Mosquitto):\n- `Data_Sensors`: Thu thập dữ liệu cảm biến từ ESP32 gửi lên.\n- `Device_control`: Gửi lệnh điều khiển bật/tắt xuống ESP32.\n- `Device_Response`: Nhận phản hồi trạng thái thực tế từ ESP32.\n\n## Base URL:\n- Mặc định: `{{base_url}}` (Thực tế backend: `http://localhost:5000`)",
+    "description": "Tài liệu API chính thức và chi tiết cho hệ thống IoT Smart Classroom (Phòng LAB-B204).\n\n## Cơ chế xác thực Bảo mật (JWT Authentication):\n- Thuật toán: HMAC-SHA256 (HS256)\n- Khóa bí mật (JWT_SECRET): `b23dcat196`\n- Thời hạn token: 24 giờ\n- Khi gửi request tới các API cảm biến, thiết bị, lịch sử và hồ sơ, cần đính kèm Header: `Authorization: Bearer <token>`.\n\n## Chức năng hệ thống:\n- Xác thực và cấp phát Token JWT người dùng.\n- Giám sát dữ liệu cảm biến: Nhiệt độ, Độ ẩm, Cường độ ánh sáng.\n- Giám sát trạng thái 3 thiết bị: Đèn, Quạt, Điều hòa.\n- Điều khiển thiết bị từ xa qua giao thức MQTT.\n- Lưu trữ và tra cứu lịch sử thao tác bật/tắt thiết bị.\n- Quản lý hồ sơ cá nhân sinh viên.\n\n## Giao tiếp MQTT:\n- `Data_Sensors`: Thu thập dữ liệu cảm biến từ ESP32 gửi lên.\n- `Device_control`: Gửi lệnh điều khiển bật/tắt xuống ESP32.\n- `Device_Response`: Nhận phản hồi trạng thái thực tế từ ESP32.\n\n## Base URL:\n- Mặc định: `{{base_url}}` (Thực tế backend: `http://localhost:5000`)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
   },
   "variable": [
     {
       "key": "base_url",
       "value": "http://localhost:5000",
       "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
     }
   ],
   "item": [
     {
+      "name": "Authentication",
+      "description": "Quản lý xác thực và cấp phát mã truy cập bảo mật JSON Web Token (JWT).",
+      "item": [
+        {
+          "name": "Login (Get JWT Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.token) {",
+                  "        pm.collectionVariables.set('token', jsonData.token);",
+                  "        console.log('Token JWT đã được tự động lưu vào biến {{token}}');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"minhanh\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Đăng nhập hệ thống bằng tài khoản sinh viên để nhận mã Token JWT. Token này được sử dụng để truy cập tất cả các API còn lại của hệ thống."
+          },
+          "response": [
+            {
+              "name": "200 OK - Đăng nhập thành công",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"minhanh\",\n  \"password\": \"123456\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Đăng nhập thành công.\",\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n  \"user\": {\n    \"user_id\": 1,\n    \"username\": \"minhanh\",\n    \"name\": \"Nguyễn Anh Minh\",\n    \"student_id\": \"B23DCAT196\",\n    \"email\": \"MinhNA.B23AT196@stu.ptit.edu.vn\"\n  }\n}"
+            },
+            {
+              "name": "401 Unauthorized - Sai thông tin đăng nhập",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"minhanh\",\n  \"password\": \"sai_mat_khau\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/login",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Tên đăng nhập hoặc mật khẩu không chính xác.\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "Sensor",
-      "description": "Quản lý và tra cứu dữ liệu các cảm biến trong phòng học",
+      "description": "Quản lý và truy xuất dữ liệu đo của các cảm biến môi trường.",
       "item": [
         {
           "name": "Get Sensor Data",
@@ -35,48 +180,53 @@
                 {
                   "key": "page",
                   "value": "1",
-                  "description": "Số thứ tự trang cần lấy (số nguyên dương >= 1)"
+                  "description": "Số trang (mặc định: 1)"
                 },
                 {
                   "key": "limit",
                   "value": "10",
-                  "description": "Số lượng bản ghi trên một trang (số nguyên dương >= 1, tùy biến tự do theo nhu cầu, mặc định: 10)"
+                  "description": "Số bản ghi mỗi trang (mặc định: 10)"
                 },
                 {
                   "key": "sort_key",
                   "value": "data_id",
-                  "description": "Trường sắp xếp: data_id | sensor_name | sensor_type | value | recorded_at"
+                  "description": "Trường sắp xếp: data_id, sensor_name, sensor_type, value, recorded_at"
                 },
                 {
                   "key": "sort_dir",
                   "value": "DESC",
-                  "description": "Chiều sắp xếp: ASC (tăng dần) hoặc DESC (giảm dần)"
+                  "description": "Chiều sắp xếp: ASC hoặc DESC"
                 },
                 {
                   "key": "search_field",
                   "value": "all",
-                  "description": "Cột tìm kiếm: sensor_name | sensor_type | recorded_at | all"
+                  "description": "Trường tìm kiếm: all, sensor_name, sensor_type, recorded_at"
                 },
                 {
                   "key": "search_value",
                   "value": "",
-                  "description": "Từ khóa tìm kiếm (tìm tương đối LIKE %value%)"
+                  "description": "Từ khóa tìm kiếm"
                 },
                 {
                   "key": "sensor_type",
                   "value": "",
-                  "description": "Lọc chính xác theo loại cảm biến: 'Nhiệt độ', 'Độ ẩm', 'Ánh sáng'"
+                  "description": "Lọc theo loại: Nhiệt độ, Độ ẩm, Ánh sáng"
                 }
               ]
             },
-            "description": "Lấy danh sách dữ liệu cảm biến từ cơ sở dữ liệu MySQL (kết hợp bảng DataSensor và Sensors).\nHỗ trợ đầy đủ phân trang, sắp xếp và tìm kiếm lọc nâng cao."
+            "description": "Lấy danh sách dữ liệu cảm biến từ cơ sở dữ liệu MySQL (kết hợp bảng DataSensor và Sensors). Yêu cầu Token xác thực Bearer."
           },
           "response": [
             {
               "name": "200 OK - Thành công",
               "originalRequest": {
                 "method": "GET",
-                "header": [],
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
                 "url": {
                   "raw": "{{base_url}}/api/sensors?page=1&limit=3",
                   "host": [
@@ -100,10 +250,62 @@
               "body": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"data_id\": 1,\n      \"sensor_id\": 1,\n      \"sensor_name\": \"Cảm biến nhiệt độ\",\n      \"sensor_type\": \"Nhiệt độ\",\n      \"value\": 28.4,\n      \"unit\": \"°C\",\n      \"recorded_at\": \"2026-08-21 13:45:32\"\n    },\n    {\n      \"data_id\": 2,\n      \"sensor_id\": 2,\n      \"sensor_name\": \"Cảm biến độ ẩm\",\n      \"sensor_type\": \"Độ ẩm\",\n      \"value\": 55.2,\n      \"unit\": \"%\",\n      \"recorded_at\": \"2026-08-21 13:45:32\"\n    },\n    {\n      \"data_id\": 3,\n      \"sensor_id\": 3,\n      \"sensor_name\": \"Cảm biến ánh sáng\",\n      \"sensor_type\": \"Ánh sáng\",\n      \"value\": 249.1,\n      \"unit\": \"lux\",\n      \"recorded_at\": \"2026-08-21 13:45:32\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"limit\": 3,\n    \"total\": 90\n  }\n}"
             },
             {
+              "name": "401 Unauthorized - Thiếu hoặc sai Token",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/sensors",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "sensors"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Truy cập bị từ chối. Vui lòng cung cấp token xác thực (Bearer Token).\"\n}"
+            },
+            {
               "name": "400 Bad Request - Tham số không hợp lệ",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/sensors?sort_key=invalid_col",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "sensors"
+                  ]
+                }
+              },
               "status": "Bad Request",
               "code": 400,
               "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
               "body": "{\n  \"success\": false,\n  \"message\": \"Tham số sort_key 'invalid_col' không hợp lệ. Chỉ chấp nhận: data_id, sensor_name, sensor_type, value, recorded_at.\"\n}"
             }
           ]
@@ -112,7 +314,7 @@
     },
     {
       "name": "Device",
-      "description": "Theo dõi và gửi lệnh điều khiển trạng thái các thiết bị trong phòng",
+      "description": "Quản lý và điều khiển 3 thiết bị chấp hành (Đèn, Quạt, Điều hòa).",
       "item": [
         {
           "name": "Get Device States",
@@ -129,15 +331,67 @@
                 "device-states"
               ]
             },
-            "description": "Lấy trạng thái hiện thời của 3 thiết bị trong phòng (1: Đèn, 2: Quạt, 3: Điều hòa) từ bảng Devices."
+            "description": "Lấy trạng thái hiện thời của 3 thiết bị trong phòng (1: Đèn, 2: Quạt, 3: Điều hòa) từ bảng Devices. Yêu cầu Token xác thực Bearer."
           },
           "response": [
             {
               "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/device-states",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "device-states"
+                  ]
+                }
+              },
               "status": "OK",
               "code": 200,
               "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
               "body": "{\n  \"devices\": [\n    {\n      \"device_id\": 1,\n      \"device_name\": \"Đèn\",\n      \"status\": \"ON\"\n    },\n    {\n      \"device_id\": 2,\n      \"device_name\": \"Quạt\",\n      \"status\": \"OFF\"\n    },\n    {\n      \"device_id\": 3,\n      \"device_name\": \"Điều hòa\",\n      \"status\": \"OFF\"\n    }\n  ]\n}"
+            },
+            {
+              "name": "401 Unauthorized - Thiếu hoặc sai Token",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/device-states",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "device-states"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Truy cập bị từ chối. Vui lòng cung cấp token xác thực (Bearer Token).\"\n}"
             }
           ]
         },
@@ -170,25 +424,133 @@
                 {
                   "key": "device_id",
                   "value": "1",
-                  "description": "ID thiết bị cần điều khiển (1: Đèn, 2: Quạt, 3: Điều hòa)"
+                  "description": "ID thiết bị: 1 (Đèn), 2 (Quạt), 3 (Điều hòa)"
                 }
               ]
             },
-            "description": "Gửi yêu cầu điều khiển bật/tắt thiết bị.\n- Backend nhận yêu cầu, ghi bản ghi vào bảng Action với trạng thái 'PENDING'.\n- Đồng thời publish bản tin điều khiển xuống topic MQTT `Device_control`.\n- Chờ phản hồi từ phần cứng qua topic `Device_Response` (hoặc timeout 2.5 giây sẽ đánh dấu 'FAIL')."
+            "description": "Gửi yêu cầu điều khiển bật/tắt thiết bị. Backend tạo Action PENDING, publish bản tin MQTT `Device_control` và chờ phản hồi từ ESP32 trong 2.5 giây. Yêu cầu Token xác thực Bearer."
           },
           "response": [
             {
               "name": "200 OK - Tiếp nhận lệnh thành công (PENDING)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"ON\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/devices/1/control",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "devices",
+                    "1",
+                    "control"
+                  ]
+                }
+              },
               "status": "OK",
               "code": 200,
               "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
               "body": "{\n  \"success\": true,\n  \"action_id\": 123,\n  \"device_id\": 1,\n  \"device_name\": \"Đèn\",\n  \"action\": \"ON\",\n  \"status\": \"PENDING\",\n  \"message\": \"Device command accepted\"\n}"
             },
             {
+              "name": "401 Unauthorized - Thiếu hoặc sai Token",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"action\": \"ON\"}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/devices/1/control",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "devices",
+                    "1",
+                    "control"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Truy cập bị từ chối. Vui lòng cung cấp token xác thực (Bearer Token).\"\n}"
+            },
+            {
               "name": "400 Bad Request - Sai mã thiết bị hoặc hành động",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action\": \"INVALID_ACTION\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/devices/1/control",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "devices",
+                    "1",
+                    "control"
+                  ]
+                }
+              },
               "status": "Bad Request",
               "code": 400,
               "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
               "body": "{\n  \"success\": false,\n  \"message\": \"Hành động điều khiển không hợp lệ. Chỉ chấp nhận: 'ON' hoặc 'OFF'.\"\n}"
             }
           ]
@@ -197,7 +559,7 @@
     },
     {
       "name": "Action History",
-      "description": "Tra cứu lịch sử thao tác bật/tắt và kết quả phản hồi của các thiết bị",
+      "description": "Lịch sử thao tác điều khiển thiết bị của người dùng.",
       "item": [
         {
           "name": "Get Action History",
@@ -217,59 +579,111 @@
                 {
                   "key": "page",
                   "value": "1",
-                  "description": "Trang cần xem (số nguyên dương >= 1)"
+                  "description": "Số trang (mặc định: 1)"
                 },
                 {
                   "key": "limit",
                   "value": "10",
-                  "description": "Số lượng bản ghi trên một trang (số nguyên dương >= 1, tùy biến tự do theo nhu cầu, mặc định: 10)"
+                  "description": "Số bản ghi mỗi trang (mặc định: 10)"
                 },
                 {
                   "key": "sort_key",
                   "value": "id",
-                  "description": "Trường sắp xếp: id | device | action | status | time"
+                  "description": "Trường sắp xếp: id, device, action, time, status"
                 },
                 {
                   "key": "sort_dir",
                   "value": "DESC",
-                  "description": "Chiều sắp xếp: ASC | DESC"
+                  "description": "Chiều sắp xếp: ASC hoặc DESC"
                 },
                 {
                   "key": "search_field",
                   "value": "all",
-                  "description": "Cột tìm kiếm: device | action | status | all"
+                  "description": "Trường tìm kiếm: all, device, action, status"
                 },
                 {
                   "key": "search_value",
                   "value": "",
-                  "description": "Từ khóa tìm kiếm (LIKE %value%)"
+                  "description": "Từ khóa tìm kiếm"
                 },
                 {
                   "key": "device",
                   "value": "",
-                  "description": "Lọc theo tên thiết bị: 'Đèn', 'Quạt', 'Điều hòa'"
+                  "description": "Lọc theo thiết bị: Đèn, Quạt, Điều hòa"
                 },
                 {
                   "key": "action",
                   "value": "",
-                  "description": "Lọc theo hành động: 'ON' hoặc 'OFF'"
+                  "description": "Lọc theo hành động: ON, OFF"
                 },
                 {
                   "key": "status",
                   "value": "",
-                  "description": "Lọc trạng thái thực thi: 'ON', 'OFF', 'PENDING', 'FAILED'"
+                  "description": "Lọc theo trạng thái: ON, OFF, PENDING, FAILED"
                 }
               ]
             },
-            "description": "Lấy danh sách lịch sử thao tác từ bảng Action JOIN bảng Devices. Hỗ trợ phân trang, tìm kiếm, lọc theo thiết bị/hành động/trạng thái và sắp xếp linh hoạt."
+            "description": "Lấy danh sách lịch sử thao tác từ bảng Action JOIN bảng Devices. Hỗ trợ phân trang, tìm kiếm, lọc theo thiết bị/hành động/trạng thái. Yêu cầu Token xác thực Bearer."
           },
           "response": [
             {
               "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/history?page=1&limit=3",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "history"
+                  ]
+                }
+              },
               "status": "OK",
               "code": 200,
               "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
               "body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"device\": \"Đèn\",\n      \"action\": \"ON\",\n      \"status\": \"SUCCESS\",\n      \"time\": \"2026-08-16 08:00:00\",\n      \"response_time\": \"2026-08-16 08:00:01\"\n    },\n    {\n      \"id\": 2,\n      \"device\": \"Quạt\",\n      \"action\": \"OFF\",\n      \"status\": \"FAIL\",\n      \"time\": \"2026-08-16 08:07:00\",\n      \"response_time\": \"2026-08-16 08:07:01\"\n    },\n    {\n      \"id\": 3,\n      \"device\": \"Điều hòa\",\n      \"action\": \"ON\",\n      \"status\": \"PENDING\",\n      \"time\": \"2026-08-16 08:14:00\",\n      \"response_time\": null\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"limit\": 10,\n    \"total\": 60\n  }\n}"
+            },
+            {
+              "name": "401 Unauthorized - Thiếu hoặc sai Token",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/history",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "history"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Truy cập bị từ chối. Vui lòng cung cấp token xác thực (Bearer Token).\"\n}"
             }
           ]
         }
@@ -277,7 +691,7 @@
     },
     {
       "name": "Profile",
-      "description": "Thông tin sinh viên và tài nguyên dự án",
+      "description": "Quản lý thông tin tài khoản sinh viên và các tài nguyên dự án.",
       "item": [
         {
           "name": "Get Profile",
@@ -294,15 +708,67 @@
                 "profile"
               ]
             },
-            "description": "Lấy thông tin cá nhân của người dùng/sinh viên thực hiện dự án từ bảng Users."
+            "description": "Lấy thông tin cá nhân của người dùng/sinh viên thực hiện dự án từ bảng Users. Yêu cầu Token xác thực Bearer."
           },
           "response": [
             {
               "name": "200 OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/profile",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "profile"
+                  ]
+                }
+              },
               "status": "OK",
               "code": 200,
               "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
               "body": "{\n  \"user_id\": 1,\n  \"name\": \"Nguyễn Anh Minh\",\n  \"student_id\": \"B23DCAT196\",\n  \"email\": \"MinhNA.B23AT196@stu.ptit.edu.vn\",\n  \"username\": \"minhanh\",\n  \"github_url\": \"https://github.com/minhcute6109-dot/IoTSmartClassroom_B23DCAT196\",\n  \"figma_url\": \"https://www.figma.com/design/bjGIBXsdJzlBvmrRa8hXwq/IOT?node-id=0-1&t=z2RED8ZvFTu4Vx7b-1\",\n  \"api_doc_url\": \"https://documenter.getpostman.com/view/47640559/2sBYHURyve\",\n  \"pdf_report_url\": \"https://drive.google.com/drive/u/2/folders/1ZonyWe0iwdl6QcNq0tvOk49-g9P1SCyg\"\n}"
+            },
+            {
+              "name": "401 Unauthorized - Thiếu hoặc sai Token",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/profile",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "profile"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": false,\n  \"message\": \"Truy cập bị từ chối. Vui lòng cung cấp token xác thực (Bearer Token).\"\n}"
             }
           ]
         }
